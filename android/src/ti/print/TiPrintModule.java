@@ -26,6 +26,7 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiBaseActivity;
 import org.appcelerator.titanium.TiBlob;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.io.TiBaseFile;
@@ -66,8 +67,8 @@ public class TiPrintModule extends KrollModule {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                Context baseActivity = TiApplication.getBaseActivity();
-                PrintManager printManager = (PrintManager) baseActivity.getSystemService(Context.PRINT_SERVICE);
+                TiBaseActivity baseActivity = (TiBaseActivity) TiApplication.getAppRootOrCurrentActivity();
+                PrintManager printManager = (PrintManager) baseActivity.getBaseContext().getSystemService(Context.PRINT_SERVICE);
                 PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter(jobName);
 
                 printManager.print(jobName, printAdapter, new PrintAttributes.Builder().build());
@@ -89,8 +90,9 @@ public class TiPrintModule extends KrollModule {
         }
 
         if (options.containsKeyAndNotNull("image")) {
+            TiBaseActivity baseActivity = (TiBaseActivity) TiApplication.getAppRootOrCurrentActivity();
             TiBlob blob = TiConvert.toBlob(options.get("image"));
-            PrintHelper photoPrinter = new PrintHelper(TiApplication.getBaseActivity());
+            PrintHelper photoPrinter = new PrintHelper(baseActivity.getBaseContext());
             photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
             Bitmap bitmap = blob.getImage();
             photoPrinter.printBitmap(jobName, bitmap);
@@ -112,8 +114,8 @@ public class TiPrintModule extends KrollModule {
     @Kroll.method
     public void printFile(KrollDict options) {
         // Get a PrintManager instance
-        Context baseActivity = TiApplication.getBaseActivity();
-        PrintManager printManager = (PrintManager) baseActivity.getSystemService(Context.PRINT_SERVICE);
+        TiBaseActivity baseActivity = (TiBaseActivity) TiApplication.getAppRootOrCurrentActivity();
+        PrintManager printManager = (PrintManager) baseActivity.getBaseContext().getSystemService(Context.PRINT_SERVICE);
         final TiBaseFile file;
 
         String jobName = "";
