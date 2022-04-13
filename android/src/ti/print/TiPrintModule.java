@@ -68,7 +68,7 @@ public class TiPrintModule extends KrollModule {
             @Override
             public void onPageFinished(WebView view, String url) {
                 TiBaseActivity baseActivity = (TiBaseActivity) TiApplication.getAppRootOrCurrentActivity();
-                PrintManager printManager = (PrintManager) baseActivity.getBaseContext().getSystemService(Context.PRINT_SERVICE);
+                PrintManager printManager = (PrintManager) baseActivity.getInitialBaseContext().getSystemService(Context.PRINT_SERVICE);
                 PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter(jobName);
 
                 printManager.print(jobName, printAdapter, new PrintAttributes.Builder().build());
@@ -92,7 +92,7 @@ public class TiPrintModule extends KrollModule {
         if (options.containsKeyAndNotNull("image")) {
             TiBaseActivity baseActivity = (TiBaseActivity) TiApplication.getAppRootOrCurrentActivity();
             TiBlob blob = TiConvert.toBlob(options.get("image"));
-            PrintHelper photoPrinter = new PrintHelper(baseActivity.getBaseContext());
+            PrintHelper photoPrinter = new PrintHelper(baseActivity.getInitialBaseContext());
             photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
             Bitmap bitmap = blob.getImage();
             photoPrinter.printBitmap(jobName, bitmap);
@@ -115,7 +115,7 @@ public class TiPrintModule extends KrollModule {
     public void printFile(KrollDict options) {
         // Get a PrintManager instance
         TiBaseActivity baseActivity = (TiBaseActivity) TiApplication.getAppRootOrCurrentActivity();
-        PrintManager printManager = (PrintManager) baseActivity.getBaseContext().getSystemService(Context.PRINT_SERVICE);
+        PrintManager printManager = (PrintManager) baseActivity.getInitialBaseContext().getSystemService(Context.PRINT_SERVICE);
         final TiBaseFile file;
 
         String jobName = "";
@@ -180,4 +180,3 @@ public class TiPrintModule extends KrollModule {
 
 
 }
-
