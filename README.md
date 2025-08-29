@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Titanium SDK 10.2.0
+- Titanium SDK 12.7.0
 
 ## Example
 ```js
